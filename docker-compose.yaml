@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: bookmark_service
+      POSTGRES_PASSWORD: bookmark_service
+
+  bookmark_service:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/bookmark_service
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://bookmark_service:bookmark_service@postgres/bookmark_service
+    depends_on:
+      - postgres
