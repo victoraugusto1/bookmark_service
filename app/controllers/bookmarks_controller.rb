@@ -1,9 +1,15 @@
+require "pry"
 class BookmarksController < ApplicationController
   before_action :set_bookmark, only: %i[ show edit update destroy ]
 
   # GET /bookmarks or /bookmarks.json
   def index
-    @bookmarks = Bookmark.all
+    search_param = params[:q].present? ? params[:q] : nil
+    @bookmarks = if search_param
+       Bookmark.search(search_param)
+    else
+      Bookmark.all
+    end
   end
 
   # GET /bookmarks/1 or /bookmarks/1.json

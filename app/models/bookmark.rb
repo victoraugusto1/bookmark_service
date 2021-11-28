@@ -1,4 +1,6 @@
 class Bookmark < ApplicationRecord
+    searchkick
+
     validates :title, :url, presence: true
 
     before_save :generate_shortened_url
