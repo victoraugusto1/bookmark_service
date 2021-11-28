@@ -1,5 +1,5 @@
 require "test_helper"
-
+require 'pry'
 class BookmarkTest < ActiveSupport::TestCase
   test "should create bookmark with title and URL" do
     bookmark = Bookmark.new(title: "Bookmark title", url: "https://bookmark.com")
@@ -20,5 +20,11 @@ class BookmarkTest < ActiveSupport::TestCase
   test "should not create bookmark without URL" do
     bookmark = Bookmark.new(title: "Bookmark title")
     assert_not bookmark.save
+  end
+
+  test "should generate shortened URL after saving bookmark" do
+    bookmark = Bookmark.new(title: "Bookmark title", url: "https://bookmark.com")
+    bookmark.save
+    assert_not_empty(bookmark.shortened_url)
   end
 end

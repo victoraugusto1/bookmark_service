@@ -70,6 +70,21 @@ RSpec.describe "bookmark management", type: :feature do
             expect(page).not_to have_content "Bookmark title"
             expect(page).not_to have_content "http://bookmark.com"
         end
+
+        it "should generate a shortened url" do
+            visit "bookmarks/new"
+            
+            fill_in "Title", with: "Bookmark title"
+            fill_in "Url", with: "http://bookmark.com"
+
+            click_button "Create Bookmark"
+
+            expect(page).to have_content "Bookmark was successfully created."
+
+            click_on("Back")
+
+            expect(page).to have_content "localhost:3000"
+        end
     end
 
     context "editing bookmarks" do
@@ -168,21 +183,6 @@ RSpec.describe "bookmark management", type: :feature do
             click_button "Update Bookmark"
 
             expect(page).to have_content "Url can't be blank"
-        end
-    end
-
-    context "removing bookmarks" do
-        it "should remove a bookmark" do
-            Bookmark.new(
-                title: "Bookmark title", url: "http://bookmark.com").save!
-
-            visit "/bookmarks"
-
-            accept_confirm do
-                click_on("Destroy")
-            end
-            
-            expect(page).to have_content "Bookmark was successfully destroyed."
         end
     end
 end
