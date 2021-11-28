@@ -40,6 +40,29 @@ services:
       - RACK_ENV=development
       - DATABASE_URL=postgres://bookmark_service:bookmark_service@postgres/bookmark_service
       - WEBPACKER_DEV_SERVER_HOST=webpack
+      - ELASTICSEARCH_URL=elasticsearch:9200
     depends_on:
       - postgres
       - webpack
+
+  elasticsearch:
+      image: docker.elastic.co/elasticsearch/elasticsearch:7.14.2
+      environment:
+        - xpack.security.enabled=false
+        - discovery.type=single-node
+        - cluster.name=es-docker-cluster
+        - bootstrap.memory_lock=true
+        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      ulimits:
+        memlock:
+          soft: -1
+          hard: -1
+        nofile:
+          soft: 65536
+          hard: 65536
+      cap_add:
+        - IPC_LOCK
+      volumes:
+        - ./tmp/elasticsearch/data:/usr/share/elasticsearch/data
+      ports:
+        - 9200:9200
