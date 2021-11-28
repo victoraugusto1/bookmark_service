@@ -1,5 +1,8 @@
 FROM ruby:alpine
 RUN apk update && apk add bash build-base nodejs postgresql-dev tzdata yarn
+
+RUN yarn add @popperjs/core bootstrap
+
 WORKDIR /bookmark_service
 COPY Gemfile /bookmark_service/Gemfile
 COPY Gemfile.lock /bookmark_service/Gemfile.lock
