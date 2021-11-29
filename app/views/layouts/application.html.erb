@@ -15,6 +15,7 @@
     <%= render partial: "shared/navbar" %>
 
     <div class="container">
+      <%= yield :bookmark_errors %>
       <%= yield %>
     </div>
   </body>

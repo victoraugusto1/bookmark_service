@@ -35,7 +35,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - ROOT_URL=localhost:3000/
+      - ROOT_URL=http://localhost:3000/
       - RAILS_ENV=development
       - RACK_ENV=development
       - DATABASE_URL=postgres://bookmark_service:bookmark_service@postgres/bookmark_service

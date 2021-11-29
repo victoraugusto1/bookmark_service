@@ -1,7 +1,11 @@
+require "validators/url_validator"
+
 class Bookmark < ApplicationRecord
     searchkick word_middle: [:title, :url, :shortened_url]
 
     validates :title, :url, presence: true
+
+    validates_with UrlValidator
 
     before_save :generate_shortened_url
 

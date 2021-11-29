@@ -2,6 +2,8 @@
     <h1>New Bookmark</h1>
 </div>
 
+<%= bookmark_errors_for @bookmark %>
+
 <%= form_with(model: @bookmark) do |f| %>
     <div class="card">
         <div class="card-body">

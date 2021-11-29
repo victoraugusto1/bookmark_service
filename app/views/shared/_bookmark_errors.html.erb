@@ -1,0 +1,13 @@
+<% content_for :bookmark_errors do %>
+    <% if object.errors.any? %>
+        <div class="alert alert-danger" role="alert">
+            <p><%= pluralize(object.errors.count, "error") %> prohibited this bookmark from being saved:</p>
+
+            <ul>
+                <% object.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+<% end %>
