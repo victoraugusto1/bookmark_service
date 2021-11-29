@@ -1,77 +1,85 @@
-require "rails_helper"
+# frozen_string_literal: true
 
-RSpec.describe "bookmark searching", type: :feature do
-    before(:each) do
-        Bookmark.destroy_all
-    end
+require 'rails_helper'
 
-    it "should find bookmark by title" do
-        Bookmark.new(
-            title: "Google bookmark", url: "http://bookmark.com").save!
+RSpec.describe 'bookmark searching', type: :feature do
+  before(:each) do
+    Bookmark.destroy_all
+  end
 
-        Bookmark.searchkick_index.refresh
+  it 'should find bookmark by title' do
+    Bookmark.new(
+      title: 'Google bookmark', url: 'http://bookmark.com'
+    ).save!
 
-        visit "/"
+    Bookmark.searchkick_index.refresh
 
-        fill_in "Search", with: "google"
-        click_button "Search"
+    visit '/'
 
-        expect(page).to have_content "Google bookmark"
-    end
+    fill_in 'Search', with: 'google'
+    click_button 'Search'
 
-    it "should find bookmark by url" do
-        Bookmark.new(
-            title: "Random bookmark", url: "http://reddit.com").save!
+    expect(page).to have_content 'Google bookmark'
+  end
 
-        Bookmark.searchkick_index.refresh
+  it 'should find bookmark by url' do
+    Bookmark.new(
+      title: 'Random bookmark', url: 'http://reddit.com'
+    ).save!
 
-        visit "/"
+    Bookmark.searchkick_index.refresh
 
-        fill_in "Search", with: "reddit"
-        click_button "Search"
+    visit '/'
 
-        expect(page).to have_content "http://reddit.com"
-    end
+    fill_in 'Search', with: 'reddit'
+    click_button 'Search'
 
-    it "should find bookmark by shortened url" do
-        Bookmark.new(
-            title: "Another bookmark", 
-            url: "http://facebook.com",
-            shortened_url: "http://fb.com").save!
+    expect(page).to have_content 'http://reddit.com'
+  end
 
-        Bookmark.searchkick_index.refresh
+  it 'should find bookmark by shortened url' do
+    Bookmark.new(
+      title: 'Another bookmark',
+      url: 'http://facebook.com',
+      shortened_url: 'http://fb.com'
+    ).save!
 
-        visit "/"
+    Bookmark.searchkick_index.refresh
 
-        fill_in "Search", with: "fb"
-        click_button "Search"
+    visit '/'
 
-        expect(page).to have_content "http://fb.com"
-    end
+    fill_in 'Search', with: 'fb'
+    click_button 'Search'
 
-    it "should show more than one result when possible" do
-        Bookmark.new(
-            title: "Google bookmark", 
-            url: "http://something.com").save!
+    expect(page).to have_content 'http://fb.com'
+  end
 
-        Bookmark.new(
-            title: "Another bookmark", 
-            url: "http://google.com").save!
+  it 'should show more than one result when possible' do
+    Bookmark.new(
+      title: 'Google bookmark',
+      url: 'http://something.com'
+    ).save!
 
-        Bookmark.new(
-            title: "Other bookmark", 
-            url: "http://site.com",
-            shortened_url: "http://googlewebsite.com").save!
+    Bookmark.new(
+      title: 'Another bookmark',
+      url: 'http://google.com'
+    ).save!
 
-        Bookmark.searchkick_index.refresh
+    Bookmark.new(
+      title: 'Other bookmark',
+      url: 'http://site.com',
+      shortened_url: 'http://googlewebsite.com'
+    ).save!
 
-        visit "/"
+    Bookmark.searchkick_index.refresh
 
-        fill_in "Search", with: "google"
-        click_button "Search"
+    visit '/'
 
-        expect(page).to have_content "Google bookmark"
-        expect(page).to have_content "http://google.com"
-        expect(page).to have_content "http://googlewebsite.com"
-    end
+    fill_in 'Search', with: 'google'
+    click_button 'Search'
+
+    expect(page).to have_content 'Google bookmark'
+    expect(page).to have_content 'http://google.com'
+    expect(page).to have_content 'http://googlewebsite.com'
+  end
 end
