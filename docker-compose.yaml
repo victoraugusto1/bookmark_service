@@ -6,7 +6,7 @@ services:
     image: postgres
     container_name: postgres
     volumes:
-      - ./tmp/db:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: bookmark_service
       POSTGRES_PASSWORD: bookmark_service
@@ -67,7 +67,7 @@ services:
       cap_add:
         - IPC_LOCK
       volumes:
-        - ./tmp/elasticsearch/data:/usr/share/elasticsearch/data
+        - esdata:/usr/share/elasticsearch/data
       ports:
         - 9200:9200
       healthcheck:
@@ -75,3 +75,7 @@ services:
         interval: 30s
         timeout: 10s
         retries: 5
+  
+volumes:
+  esdata:
+  pgdata:
