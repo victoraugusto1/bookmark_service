@@ -1,5 +1,4 @@
 require 'uri'
-require 'pry'
 
 class UrlValidator < ActiveModel::Validator
     def validate(record)

@@ -1,4 +1,8 @@
-<p id="notice"><%= notice %></p>
+<% flash.each do |key, value| %>
+  <div class="alert alert-danger" role="alert">
+    <%= value %>
+   </div>
+<% end %>
 
 <div class="col-xs-1" align="center">
   <h1>Bookmarks</h1>

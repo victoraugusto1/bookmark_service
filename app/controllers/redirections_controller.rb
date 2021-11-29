@@ -5,7 +5,7 @@ class RedirectionsController < ApplicationController
         if bookmark
             redirect_to bookmark.url
         else
-            puts "couldn't find bookmark"
+            redirect_to bookmarks_path, flash: {alert: "Shortened URL not found"}
         end
     end
 end
