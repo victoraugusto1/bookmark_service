@@ -1,6 +1,29 @@
-<h1>Editing Bookmark</h1>
+<div class="col-xs-1" align="center">
+    <h1>Editing Bookmark</h1>
 
-<%= render 'form', bookmark: @bookmark %>
+    <%= form_with(model: @bookmark) do |f| %>
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3">
+                    <%= f.label :title, { class: "form-label"} %>
+                    <%= f.text_field :title, { class: "form-control", placeholder: "Title" } %>
+                </div>
 
-<%= link_to 'Show', @bookmark %> |
-<%= link_to 'Back', bookmarks_path %>
+                <div class="mb-3">
+                    <%= f.label :url, { class: "form-label"} %>
+                    <%= f.text_field :url, { class: "form-control", placeholder: "http://google.com" } %>
+                </div>
+
+                <div class="mb-3">
+                    <%= f.label :shortened_url, { class: "form-label"} %>
+                    <%= f.text_field :shortened_url, { class: "form-control", placeholder: "http://goo.gl" } %>
+                </div>
+
+                <%= f.submit "Submit", class: "btn btn-primary" %>
+            </div>
+        </div>
+    <% end %>
+
+    <%= link_to 'Show', @bookmark %> |
+    <%= link_to 'Back', bookmarks_path %>
+</div>

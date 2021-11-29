@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root 'welcome#index'
   resources :bookmarks
 
   get "search", to: "bookmarks#search"

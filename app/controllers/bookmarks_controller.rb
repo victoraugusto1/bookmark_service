@@ -6,7 +6,7 @@ class BookmarksController < ApplicationController
   def index
     search_param = params[:q].present? ? params[:q] : nil
     @bookmarks = if search_param
-       Bookmark.search(search_param)
+      Bookmark.search(search_param, fields: [:title, :url, :shortened_url], match: :word_middle)
     else
       Bookmark.all
     end

@@ -1,9 +1,17 @@
 class Bookmark < ApplicationRecord
-    searchkick
+    searchkick word_middle: [:title, :url, :shortened_url]
 
     validates :title, :url, presence: true
 
     before_save :generate_shortened_url
+
+    def search_data
+        {
+          title: title,
+          url: url,
+          shortened_url: shortened_url
+        }
+    end
 
     private
 
