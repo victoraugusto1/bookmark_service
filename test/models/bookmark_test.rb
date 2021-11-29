@@ -1,6 +1,10 @@
 require "test_helper"
-
+require "pry"
 class BookmarkTest < ActiveSupport::TestCase
+  setup do
+    Bookmark.destroy_all
+  end
+
   test "should create bookmark with title and URL" do
     bookmark = Bookmark.new(
       title: "Bookmark title", 
@@ -42,7 +46,7 @@ class BookmarkTest < ActiveSupport::TestCase
   test "should not create bookmark with invalid URL" do
     bookmark = Bookmark.new(
       title: "Bookmark title", 
-      url: "invalid")
+      url: "invalid url")
 
     assert_not bookmark.save
   end
@@ -51,8 +55,17 @@ class BookmarkTest < ActiveSupport::TestCase
     bookmark = Bookmark.new(
       title: "Bookmark title", 
       url: "http://google.com",
-      shortened_url: "invalid")
+      shortened_url: "invalid url")
 
     assert_not bookmark.save
+  end
+
+  test "should add new bookmark with top level url" do
+    Bookmark.new(
+      title: "Bookmark title", 
+      url: "http://google.com/my_url").save
+
+    top_level_bookmark = Bookmark.find_by_url("https://google.com")
+    assert top_level_bookmark, nil
   end
 end

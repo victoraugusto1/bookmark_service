@@ -1,5 +1,5 @@
 require "rails_helper"
-
+require "pry"
 RSpec.describe "bookmark management", type: :feature do
     context "creating a bookmark" do
         before(:each) do
@@ -94,7 +94,7 @@ RSpec.describe "bookmark management", type: :feature do
                 
                 fill_in "Title", with: "Bookmark title"
                 fill_in "Url", with: "invalid url"
-    
+
                 click_button "Create bookmark"
     
                 expect(page).to have_content "URL is invalid"
@@ -105,7 +105,7 @@ RSpec.describe "bookmark management", type: :feature do
                 expect(page).not_to have_content "http://bookmark.com"                
             end
 
-            it "does not create a bookmark with an invalid URL" do
+            it "does not create a bookmark with an invalid shortened URL" do
                 visit "bookmarks/new"
                 
                 fill_in "Title", with: "Bookmark title"
@@ -137,10 +137,11 @@ RSpec.describe "bookmark management", type: :feature do
     
                 click_on("Edit")
                 fill_in "Title", with: "New title"
+                
                 click_button "Update bookmark"
     
                 expect(page).to have_content "Bookmark was successfully updated."
-    
+
                 click_on("Back")
     
                 expect(page).to have_content "New title"
@@ -198,6 +199,48 @@ RSpec.describe "bookmark management", type: :feature do
             end
         end
 
+
+        context "adding top level url" do
+            it "should add new bookmark with top level url" do
+                visit "bookmarks/new"
+                
+                fill_in "Title", with: "My title"
+                fill_in "Url", with: "http://bookmark.com/my_url"
+    
+                click_button "Create bookmark"
+
+                Bookmark.searchkick_index.refresh
+    
+                expect(page).to have_content "Bookmark was successfully created."
+    
+                click_on("Back")
+    
+                expect(page).to have_content "http://bookmark.com/my_url"
+                expect(page).to have_content "https://bookmark.com"
+                expect(page).to have_content "bookmark"
+                expect(page).to have_css "tr", count: 3
+            end
+
+            it "should not duplicate bookmark containing only top level url" do
+                visit "bookmarks/new"
+                
+                fill_in "Title", with: "My title"
+                fill_in "Url", with: "http://twitter.com"
+    
+                click_button "Create bookmark"
+
+                Bookmark.searchkick_index.refresh
+    
+                expect(page).to have_content "Bookmark was successfully created."
+    
+                click_on("Back")
+    
+                expect(page).to have_content "http://twitter.com", count: 1
+                expect(page).not_to have_content "https://twitter.com"
+                expect(page).to have_css "tr", count: 2
+            end
+        end
+
         context "invalid edit" do
             it "should not allow user to remove title" do
                 Bookmark.new(
@@ -232,7 +275,7 @@ RSpec.describe "bookmark management", type: :feature do
                 visit "/bookmarks"
     
                 click_on("Edit")
-                fill_in "Url", with: "invalid"
+                fill_in "Url", with: "invalid url"
                 click_button "Update bookmark"
     
                 expect(page).to have_content "URL is invalid"
@@ -247,7 +290,7 @@ RSpec.describe "bookmark management", type: :feature do
                 visit "/bookmarks"
     
                 click_on("Edit")
-                fill_in "Shortened url", with: "invalid"
+                fill_in "Shortened url", with: "invalid url"
                 click_button "Update bookmark"
     
                 expect(page).to have_content "URL is invalid"
